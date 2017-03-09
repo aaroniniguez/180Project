@@ -4,7 +4,7 @@
 
 int main(void) {
 	FILE *pp;
-	pp = popen("exec python test.py", "r");
+	pp = popen("exec python getGesture.py", "r");
 	long ret;
 	char *ptr;
 	if (pp != NULL) {
