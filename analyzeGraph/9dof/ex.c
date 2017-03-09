@@ -7,7 +7,7 @@
 int main()
 {
 	FILE *fpz;
-	fpz = fopen("straight_linez.txt","w+");
+	fpz = fopen("../straight_linez.txt","w+");
   
  data_t accel_data, gyro_data, mag_data;
 //	data_t gyro_offset;
