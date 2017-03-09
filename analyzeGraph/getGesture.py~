@@ -3,7 +3,9 @@ y = []
 z = []
 f = open("straight_linez.txt", "r")
 lines = f.readlines()[1:-1]
-for line in lines:
+print lines
+quit()
+for line in open("straight_linez.txt","r"):
     x.append(line.replace("\n","").split(",")[0])
     y.append(line.replace("\n","").split(",")[1])
     z.append(line.replace("\n","").split(",")[2])
