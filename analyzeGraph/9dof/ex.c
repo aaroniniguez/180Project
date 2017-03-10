@@ -23,7 +23,13 @@ int main()
 	set_accel_scale(accel, a_scale);	
 	a_res = calc_accel_res(a_scale);
 fprintf(fpz,"%s,%s,%s\n","Xacc", "Yacc", "Zacc");
- 
+
+time_t startTime = time();
+while(time() - startTime < 10)
+{
+	printf("hi counting");
+	
+}
  while(1) {
 		accel_data = read_accel(accel, a_res);
 		

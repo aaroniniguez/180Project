@@ -29,6 +29,7 @@ for idx,val in enumerate(z):
             if x[idx] <.5:
                 mydict[idx] = val, y[idx],x[idx]
 if len(mydict):
+    #this is client code, so send a k if you are kari or an m if you are meera
    print str(sum([i*i for i in z]))+",1"
 else:
     print 0
