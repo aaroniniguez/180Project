@@ -23,8 +23,6 @@ int main()
 	set_accel_scale(accel, a_scale);	
 	a_res = calc_accel_res(a_scale);
 fprintf(fpz,"%s,%s,%s\n","Xacc", "Yacc", "Zacc");
-
-printf("Getting data recording  for 3 seconds . . . ");
 time_t startTime = time(NULL);
 while(time(NULL) - startTime < 3)
 {

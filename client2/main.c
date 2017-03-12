@@ -19,7 +19,7 @@ int client_handle_connection(int client_socket_fd)
 {
 	int n;
 	char buffer[256];
- float rad_to_deg = 57.29577;
+	float rad_to_deg = 57.29577;
 	data_t accel_data;
 	float a_res;
 	float roll,pitch, yaw;
