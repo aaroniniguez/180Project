@@ -23,26 +23,19 @@ int main()
 	set_accel_scale(accel, a_scale);	
 	a_res = calc_accel_res(a_scale);
 fprintf(fpz,"%s,%s,%s\n","Xacc", "Yacc", "Zacc");
-
-time_t startTime = time();
-while(time() - startTime < 10)
+time_t startTime = time(NULL);
+while(time(NULL) - startTime < 3)
 {
-	printf("hi counting");
-	
-}
- while(1) {
-		accel_data = read_accel(accel, a_res);
-		
+	accel_data = read_accel(accel, a_res);
 	float gZ=accel_data.z+1-0.04;
 	float gX=accel_data.x+0.12;
 	float gY=accel_data.y-0.1+0.06;
- 
- fprintf(fpz, "%f,%f,%f\n", gX,gY,gZ);
+ 	fprintf(fpz, "%f,%f,%f\n", gX,gY,gZ);
  //printf("%f\n", gY);
 	
 //usleep(10000); 
 	}	
  
- fclose(fpz);
+fclose(fpz);
 
 }
