@@ -30,6 +30,6 @@ for idx,val in enumerate(z):
                 mydict[idx] = val, y[idx],x[idx]
 if len(mydict):
     #this is client code, so send a k if you are kari or an m if you are meera
-   print str(sum([i*i for i in z]))+",1"
+   print "1,"+str(int(sum([i*i for i in z])))
 else:
-    print 0
+    print "0,0"

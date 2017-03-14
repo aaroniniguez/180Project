@@ -7,18 +7,11 @@
 int main()
 {
 	FILE *fpz;
-	fpz = fopen("../straight_linez.txt","w+");
-  
- data_t accel_data, gyro_data, mag_data;
-//	data_t gyro_offset;
-//	int16_t temperature;
-	float a_res, g_res, m_res;
+	fpz = fopen("straight_linez.txt","w+");
+	data_t accel_data;
+	float a_res;
 	mraa_i2c_context accel, gyro, mag;
 	accel_scale_t a_scale = A_SCALE_4G;
-//	gyro_scale_t g_scale = G_SCALE_245DPS;
-//	mag_scale_t m_scale = M_SCALE_2GS;
-
-	//initialize sensors, set scale, and calculate resolution.
 	accel = accel_init();
 	set_accel_scale(accel, a_scale);	
 	a_res = calc_accel_res(a_scale);
@@ -37,5 +30,18 @@ while(time(NULL) - startTime < 3)
 	}	
  
 fclose(fpz);
+
+FILE *pp;
+pp = popen("exec python getGesture.py", "r");
+long ret;
+char *ptr;
+if (pp != NULL) {
+	char *line;
+	char buf[100000];
+	//line is either 0 or 1
+	line = fgets(buf, sizeof buf, pp);
+	printf("%s", line);
+	pclose(pp);
+}
 
 }

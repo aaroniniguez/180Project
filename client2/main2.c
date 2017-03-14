@@ -7,7 +7,6 @@
 #include <math.h>
 #include <mraa/i2c.h>
 #include "LSM9DS0.h"
-#include <stdbool.h>
 
 static volatile int run_flag = 1;
 
@@ -19,45 +18,44 @@ void do_when_interrupted()
 int client_handle_connection(int client_socket_fd)
 {
 	int n;
-	FILE *pp;
-	FILE *fpz;
 	char buffer[256];
-	float a_res;
-	accel_scale_t a_scale = A_SCALE_4G;//only generate data wihin +-4
-	a_res = calc_accel_res(a_scale);
-	mraa_i2c_context accel;
-	data_t accel_data;
-	accel = accel_init();
-	set_accel_scale(accel, a_scale);	
-	accel_data = read_accel(accel, a_res);
 	float rad_to_deg = 57.29577;
+	data_t accel_data;
+	float a_res;
 	float roll,pitch, yaw;
       	int rl, fb;
-	time_t startTime = time(NULL);
-	time_t countTime = time(NULL);
-	char *line;
-	char buf[100000];
+	mraa_i2c_context accel;
+	accel_scale_t a_scale = A_SCALE_4G;//only generate data wihin +-4
+
+	//initialize sensors, set scale, and calculate resolution.
+	accel = accel_init();
+	set_accel_scale(accel, a_scale);	
+	a_res = calc_accel_res(a_scale);
+
+//	struct timeval tv;
+//	double sec_since_epoch;
+
 	memset(buffer, 0, 256);
+	//sprintf(buffer, "time (epoch),temperature/C");
+
+	//n = write(client_socket_fd, buffer, strlen(buffer));
+	//if (n < 0) {
+	//	return client_error("ERROR writing to socket");
+	//}
+
+	//memset(buffer, 0, 256);
+
+	//n = read(client_socket_fd, buffer, 255);
+	//if (n < 0) {
+	//	return client_error("ERROR reading from socket");
+	//}
+
+	//printf("msg from server: %s\n", buffer);
+
 	while (run_flag) {
-		memset(buffer, 0, 256);
-		buffer[0]='g';
-   //printf("5\n");
-		n = write(client_socket_fd, buffer, strlen(buffer));
-		//printf("6\n");
-		if (n < 0) {
-			return client_error("ERROR writing to socket");
-		}
-		memset(buffer, 0, 256);
-//printf("7\n");
-		n = read(client_socket_fd, buffer, 255);
-		if (n < 0) {
-			return client_error("ERROR reading from socket");
-		}
-   //printf("8\n");
-  if(buffer[0]=='m')
-  {
-	printf("if statement %s\n", buffer);
-	accel_data = read_accel(accel, a_res);
+//		gettimeofday(&tv, NULL);
+//		sec_since_epoch = (double) tv.tv_sec + (double) tv.tv_usec/1000000.0;
+accel_data = read_accel(accel, a_res);
 		if (accel_data.z > -1.1 && accel_data.z < -.9){
 		//	printf("up");
 		}
@@ -129,77 +127,10 @@ int client_handle_connection(int client_socket_fd)
 		if (n < 0) {
 			return client_error("ERROR reading from socket");
 		}
-memset(buffer, 0, 256);
-}
-else if(buffer[0]=='1')
-{
-	memset(buffer, 0, 256);
-	printf("else statement %s\n", buffer);
-	bool print1=0;
-	bool print2=0;
-	bool print3=0;
-	countTime = time(NULL);
-	printf("\nDo an action in 3 seconds...\n");
-	while(time(NULL) - countTime <4){
-	if(time(NULL)-countTime == 3 && !print3)
-	{
-		//printf("3...\n");
-		print3=1;
 
+		printf("msg from server: %s\n", buffer);
+//		usleep(500000);
 	}
-	else if(time(NULL) - countTime ==2 && !print2)
-	{
-		//printf("2...\n");
-		print2=1;
-	}
-	else if(time(NULL)-countTime == 1 && !print1)
-	{
-		//printf("1..\n");
-		print1=1;
-	}
-	}
-	printf("NOW..\n");
-	
-	fpz = fopen("straight_linez.txt","w+");
-	fprintf(fpz,"%s,%s,%s\n","Xacc", "Yacc", "Zacc");
-	startTime = time(NULL);
-	while(time(NULL) - startTime < 3)
-	{
-	accel_data = read_accel(accel, a_res);
-	float gZ=accel_data.z+1-0.04;
-	float gX=accel_data.x+0.12;
-	float gY=accel_data.y-0.1+0.06;
-	fprintf(fpz, "%f,%f,%f\n", gX,gY,gZ);
-	}	
-	fclose(fpz);
-	pp = popen("exec python getGesture.py", "r");
-	if (pp != NULL) {
-		//line is either 0 or 1
-		line = fgets(buf, sizeof buf, pp);
-		if (line == NULL){
-			line = "0,0";
-			printf("null char\n");
-		}
-		printf("%s", line);
-		sprintf(buffer, "m,%s", line);
-		printf("sending: %s\n", buffer);
-		n = write(client_socket_fd, buffer, strlen(buffer));
-		printf("number of bits sent:%i\n",n);
-		//printf("1\n");
-		pclose(pp);
-		//printf("2\n");
-	}
-//printf("3\n");
-	memset(buffer, 0, 256);
-	//printf("4/n");
-}
-else if(strlen(buffer) != 0){
-	printf("not m or 1: %s\n",buffer);
-}
-	
-  //printf("4\n");
-  }
-	printf("closed socket");
 	close(client_socket_fd);
 	return 1;
 }
