@@ -20,7 +20,7 @@ int client_handle_connection(int client_socket_fd)
 {
 	int n;
 	FILE *pp;
-	FILE *fpz;
+	FILE *fpz, *fpz1;
 	char buffer[256];
 	float a_res;
 	accel_scale_t a_scale = A_SCALE_4G;//only generate data wihin +-4
@@ -161,7 +161,9 @@ else if(buffer[0]=='1')
 	printf("NOW..\n");
 	
 	fpz = fopen("straight_linez.txt","w+");
+	fpz1 = fopen("straight_linez.csv","w+");
 	fprintf(fpz,"%s,%s,%s\n","Xacc", "Yacc", "Zacc");
+	fprintf(fpz1,"%s,%s,%s\n","Xacc", "Yacc", "Zacc");
 	startTime = time(NULL);
 	while(time(NULL) - startTime < 3)
 	{
@@ -170,8 +172,10 @@ else if(buffer[0]=='1')
 	float gX=accel_data.x+0.12;
 	float gY=accel_data.y-0.1+0.06;
 	fprintf(fpz, "%f,%f,%f\n", gX,gY,gZ);
+	fprintf(fpz1, "%f,%f,%f\n", gX,gY,gZ);
 	}	
 	fclose(fpz);
+	fclose(fpz1);
 	pp = popen("exec python getGesture.py", "r");
 	if (pp != NULL) {
 		//line is either 0 or 1
