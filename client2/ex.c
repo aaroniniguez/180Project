@@ -6,8 +6,9 @@
 
 int main()
 {
-	FILE *fpz;
-	fpz = fopen("straight_linez.txt","w+");
+	FILE *fpz, *fpz1;
+	fpz = fopen("straight_linez.csv","w+");
+	fpz1 = fopen("straight_linez.txt","w+");
 	data_t accel_data;
 	float a_res;
 	mraa_i2c_context accel, gyro, mag;
@@ -15,7 +16,8 @@ int main()
 	accel = accel_init();
 	set_accel_scale(accel, a_scale);	
 	a_res = calc_accel_res(a_scale);
-fprintf(fpz,"%s,%s,%s\n","Xacc", "Yacc", "Zacc");
+	fprintf(fpz,"%s,%s,%s\n","Xacc", "Yacc", "Zacc");
+	fprintf(fpz1,"%s,%s,%s\n","Xacc", "Yacc", "Zacc");
 time_t startTime = time(NULL);
 while(time(NULL) - startTime < 3)
 {
@@ -24,12 +26,14 @@ while(time(NULL) - startTime < 3)
 	float gX=accel_data.x+0.12;
 	float gY=accel_data.y-0.1+0.06;
  	fprintf(fpz, "%f,%f,%f\n", gX,gY,gZ);
+ 	fprintf(fpz1, "%f,%f,%f\n", gX,gY,gZ);
  //printf("%f\n", gY);
 	
 //usleep(10000); 
 	}	
  
 fclose(fpz);
+fclose(fpz1);
 
 FILE *pp;
 pp = popen("exec python getGesture.py", "r");

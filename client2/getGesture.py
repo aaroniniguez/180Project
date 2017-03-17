@@ -23,13 +23,17 @@ y = [i-avgVal for i in y]
 avgVal = sum(z)/len(z)
 z = [i-avgVal for i in z]
 mydict = {}
+top = ()
+#dummy variable
+dif = 201
 for idx,val in enumerate(z):
-    if val > 1.5:
-        if y[idx] < .5:
-            if x[idx] <.5:
-                mydict[idx] = val, y[idx],x[idx]
-if len(mydict):
-    #this is client code, so send a k if you are kari or an m if you are meera
-   print "1,"+str(int(sum([i*i for i in z])))
+    if val > 2:
+        top = (1,idx)
+    if top and val < -2:
+            dif = idx - top[1]
+    #        print dif
+
+if dif < 200:
+    print "1,"+str(int(sum([i*i for i in z])))
 else:
     print "0,0"
